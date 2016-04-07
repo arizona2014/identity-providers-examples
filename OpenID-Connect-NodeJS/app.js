@@ -302,6 +302,10 @@ app.get('/client', oidc.use('client'), function (req, res) {
 });
 
 app.get('/client/:id', oidc.use('client'), function (req, res, next) {
+	
+	console.log("user");
+	console.log(req.params.id);
+	
     req.model.client.findOne({user: req.session.user, id: req.params.id}, function (err, client) {
         if (err) {
             next(err);
