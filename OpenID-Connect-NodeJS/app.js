@@ -280,10 +280,6 @@ app.post('/client/register', oidc.use('client'), function (req, res, next) {
     req.body.secret = req.session.register_client.secret;
     req.body.user = req.session.user;		
     req.body.redirect_uris = req.body.redirect_uris.split(/[, ]+/);
-
-	var a= "ssss";	
-	console.log(a); 
-	
 	
     req.model.client.create(req.body, function (err, client) {
         if (!err && client) {
