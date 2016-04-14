@@ -267,7 +267,7 @@ app.get('/client/register', oidc.use('client'), function (req, res, next) {
             } else if (!err) {
                 mkId();
             } else {
-                next(err);
+                return next(err);
             }
         });
     };
@@ -275,6 +275,10 @@ app.get('/client/register', oidc.use('client'), function (req, res, next) {
 });
 
 app.post('/client/register', oidc.use('client'), function (req, res, next) {
+	
+	console.log("req.session");
+	console.log(req.session);
+	
     delete req.session.error;
     req.body.key = req.session.register_client.key;
     req.body.secret = req.session.register_client.secret;
@@ -285,7 +289,7 @@ app.post('/client/register', oidc.use('client'), function (req, res, next) {
         if (!err && client) {
             res.redirect('/client/' + client.id);
         } else {
-            next(err);
+            return next(err);
         }
     });
 });
@@ -304,12 +308,9 @@ app.get('/client', oidc.use('client'), function (req, res) {
 
 app.get('/client/:id', oidc.use('client'), function (req, res, next) {
 	
-	console.log("user");
-	console.log(req.params.id);
-	
     req.model.client.findOne({user: req.session.user, id: req.params.id}, function (err, client) {
         if (err) {
-            next(err);
+            return next(err);
         } else if (client) {
             var html = '<h1>Client ' + client.name + ' Page</h1><div><a href="/client">Go back</a></div><ul><li>Key: ' + client.key + '</li><li>Secret: ' + client.secret + '</li><li>Redirect Uris: <ul>';
             client.redirect_uris.forEach(function (uri) {
